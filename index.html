@@ -3,65 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AMMAR-Ai-Academy | المنصة الذكية</title>
+    <title>AMMAR-Ai-Academy | المساعد الذكي</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --brand-color: #4f46e5;
-            --brand-dark: #3730a3;
-            --bg-light: #f3f4f6;
-            --text-main: #1f2937;
+            --brand-color: #6366f1;
+            --brand-dark: #4338ca;
+            --bg-light: #f8fafc;
+            --text-main: #1e293b;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-light);
             margin: 0;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
+            color: var(--text-main);
         }
 
-        /* الهيدر */
+        /* الهيدر واللوجو */
         header {
             background: white;
-            padding: 15px 25px;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-            z-index: 10;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
         .logo {
-            font-size: 1.6rem;
-            font-weight: bold;
+            font-size: 1.5rem;
+            font-weight: 800;
             color: var(--brand-color);
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
-        /* منطقة المحادثة */
-        #chat-container {
+        .logo i { font-size: 1.8rem; }
+
+        /* منطقة الإعدادات */
+        .api-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .api-card {
+            background: #EEF2FF;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px dashed var(--brand-color);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .api-card input {
             flex: 1;
-            padding: 20px;
-            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #c7d2fe;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        /* صندوق المحادثة */
+        .chat-wrapper {
+            max-width: 800px;
+            margin: 0 auto 100px;
+            padding: 0 15px;
+        }
+
+        #chat-flow {
             display: flex;
             flex-direction: column;
             gap: 20px;
-            max-width: 900px;
-            margin: 0 auto;
-            width: 100%;
         }
 
         .bubble {
-            max-width: 80%;
+            max-width: 85%;
             padding: 15px 20px;
             border-radius: 20px;
-            line-height: 1.6;
-            font-size: 1.05rem;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            line-height: 1.7;
         }
 
         .user-bubble {
@@ -75,170 +99,156 @@
             background: white;
             color: var(--text-main);
             align-self: flex-end;
+            border: 1px solid #e2e8f0;
             border-bottom-left-radius: 4px;
-            border: 1px solid #e5e7eb;
-            white-space: pre-wrap; /* للحفاظ على تنسيق الأسطر */
         }
 
-        .label {
+        .icon-label {
             font-size: 0.75rem;
-            font-weight: bold;
             margin-bottom: 5px;
             display: block;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-weight: bold;
+            opacity: 0.8;
         }
 
-        /* شريط الإدخال */
-        .footer-input {
+        /* شريط الإدخال السفلي */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
             background: white;
             padding: 20px;
-            border-top: 1px solid #e5e7eb;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
         }
 
-        .input-wrapper {
-            max-width: 900px;
+        .input-group {
+            max-width: 800px;
             margin: 0 auto;
             display: flex;
-            gap: 15px;
+            gap: 12px;
         }
 
-        #user-input {
+        #user-msg {
             flex: 1;
-            padding: 15px;
-            border: 2px solid #e5e7eb;
+            padding: 14px;
+            border: 2px solid #f1f5f9;
             border-radius: 12px;
+            background: #f8fafc;
             outline: none;
-            font-size: 1rem;
             transition: 0.3s;
         }
 
-        #user-input:focus { border-color: var(--brand-color); }
+        #user-msg:focus { border-color: var(--brand-color); background: white; }
 
-        .btn-send {
+        .send-btn {
             background: var(--brand-color);
             color: white;
             border: none;
-            padding: 0 25px;
+            width: 50px;
             border-radius: 12px;
             cursor: pointer;
+            font-size: 1.2rem;
             transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
-        .btn-send:hover { background: var(--brand-dark); transform: translateY(-2px); }
-        .btn-send:disabled { background: #9ca3af; transform: none; }
+        .send-btn:hover { background: var(--brand-dark); transform: scale(1.05); }
 
-        .loader { display: none; text-align: center; color: #6b7280; font-size: 0.9rem; margin-top: 10px; }
+        /* حالة التحميل */
+        .typing { font-style: italic; color: #94a3b8; font-size: 0.9rem; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
 
 <header>
     <div class="logo">
-        <i class="fas fa-brain"></i>
+        <i class="fas fa-graduation-cap"></i>
         <span>AMMAR-Ai-Academy</span>
     </div>
-    <div style="color: #10b981; font-weight: bold; font-size: 0.9rem;">
-        <i class="fas fa-circle"></i> متصل بنظام الأكاديمية
-    </div>
+    <div style="font-size: 0.8rem; color: #64748b;">الإصدار 2.0 ⚡</div>
 </header>
 
-<div id="chat-container">
-    <div class="bubble ai-bubble">
-        <span class="label" style="color: var(--brand-color);"><i class="fas fa-robot"></i> نظام الأكاديمية</span>
-        مرحباً بك في AMMAR-Ai-Academy. أنا مساعدك الشخصي المدعوم بالذكاء الاصطناعي، كيف يمكنني خدمتك اليوم؟
+<div class="api-container">
+    <div class="api-card">
+        <i class="fas fa-key" style="color: var(--brand-color);"></i>
+        <input type="password" id="api-key" placeholder="أدخل مفتاح OpenRouter لتفعيل الذكاء...">
     </div>
 </div>
 
-<div class="loader" id="typing-indicator">
-    <i class="fas fa-keyboard fa-fade"></i> جاري كتابة الرد...
+<div class="chat-wrapper">
+    <div id="chat-flow">
+        <div class="bubble ai">
+            <span class="icon-label"><i class="fas fa-robot"></i> نظام الأكاديمية</span>
+            أهلاً بك في أكاديمية عمار للذكاء الاصطناعي. كيف يمكنني مساعدتك في دروسك اليوم؟
+        </div>
+    </div>
+    <div id="status" class="typing"><i class="fas fa-spinner fa-spin"></i> جاري استشارة المعلم الذكي...</div>
 </div>
 
-<div class="footer-input">
-    <div class="input-wrapper">
-        <input type="text" id="user-input" placeholder="اكتب سؤالك التعليمي هنا...">
-        <button class="btn-send" id="send-btn">
-            <i class="fas fa-paper-plane"></i>
-        </button>
+<div class="bottom-bar">
+    <div class="input-group">
+        <input type="text" id="user-msg" placeholder="اسأل عن الفيزياء، الكيمياء، أو البرمجة...">
+        <button class="send-btn" id="send-btn"><i class="fas fa-paper-plane"></i></button>
     </div>
 </div>
 
 <script>
-    // ⬇️ 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 ⬇️
-    const INTERNAL_API_KEY = "sk-or-v1-..........................."; 
-
-    const chatBox = document.getElementById('chat-container');
-    const userInput = document.getElementById('user-input');
+    const chatFlow = document.getElementById('chat-flow');
+    const userIn = document.getElementById('user-msg');
+    const keyIn = document.getElementById('api-key');
     const sendBtn = document.getElementById('send-btn');
-    const loader = document.getElementById('typing-indicator');
+    const status = document.getElementById('status');
 
-    function appendMessage(role, text) {
+    function createBubble(role, text) {
         const div = document.createElement('div');
         div.className = `bubble ${role === 'user' ? 'user-bubble' : 'ai-bubble'}`;
         
         const icon = role === 'user' ? 'fa-user' : 'fa-robot';
-        const label = role === 'user' ? 'الطالب' : 'AMMAR-Ai';
-        const color = role === 'user' ? '#fff' : 'var(--brand-color)';
+        const label = role === 'user' ? 'أنت' : 'AMMAR-Ai';
 
-        div.innerHTML = `<span class="label" style="color:${color}"><i class="fas ${icon}"></i> ${label}</span>${text}`;
-        chatBox.appendChild(div);
-        chatBox.scrollTop = chatBox.scrollHeight;
+        div.innerHTML = `<span class="icon-label"><i class="fas ${icon}"></i> ${label}</span>${text}`;
+        chatFlow.appendChild(div);
+        window.scrollTo(0, document.body.scrollHeight);
     }
 
-    async function callAcademyAI(question) {
-        // مصفوفة الموديلات للتبديل التلقائي في حال تعطل أحدها
-        const models = ["google/gemini-2.0-flash-001", "google/gemini-pro-1.5"];
-        
-        for (let model of models) {
-            try {
-                const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${INTERNAL_API_KEY}`,
-                        "Content-Type": "application/json",
-                        "HTTP-Referer": window.location.href
-                    },
-                    body: JSON.stringify({
-                        "model": model,
-                        "messages": [{ "role": "user", "content": question }]
-                    })
-                });
-
-                const data = await response.json();
-                if (data.choices && data.choices[0]) {
-                    return data.choices[0].message.content;
-                }
-            } catch (e) {
-                console.warn(`فشل الموديل ${model}.. جاري تجربة البديل.`);
-            }
-        }
-        throw new Error("عذراً، نظام الأكاديمية مشغول حالياً. حاول مجدداً بعد دقيقة.");
+    async function askAI(question, key) {
+        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${key}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "model": "google/gemini-2.0-flash-001",
+                "messages": [{ "role": "user", "content": question }]
+            })
+        });
+        const data = await response.json();
+        return data.choices[0].message.content;
     }
 
     sendBtn.addEventListener('click', async () => {
-        const text = userInput.value.trim();
-        if (!text) return;
+        const q = userIn.value.trim();
+        const k = keyIn.value.trim();
+        if (!q || !k) return alert("يرجى التأكد من وضع المفتاح وكتابة السؤال!");
 
-        appendMessage('user', text);
-        userInput.value = '';
+        createBubble('user', q);
+        userIn.value = '';
+        status.style.display = 'block';
         sendBtn.disabled = true;
-        loader.style.display = 'block';
 
         try {
-            const aiReply = await callAcademyAI(text);
-            appendMessage('ai', aiReply);
-        } catch (error) {
-            appendMessage('ai', "❌ " + error.message);
+            const reply = await askAI(q, k);
+            createBubble('ai', reply);
+        } catch (err) {
+            createBubble('ai', "عذراً، حدث خطأ في الاتصال. تأكد من المفتاح.");
         } finally {
+            status.style.display = 'none';
             sendBtn.disabled = false;
-            loader.style.display = 'none';
         }
     });
 
-    userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendBtn.click(); });
+    userIn.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendBtn.click(); });
 </script>
 
 </body>
