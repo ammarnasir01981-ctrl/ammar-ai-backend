@@ -3,114 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المساعد التعليمي الذكي - الإصدار المستقر</title>
+    <title>AMMAR-Ai-Academy | المساعد الذكي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --primary: #4f46e5; --bg: #f3f4f6; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; height: 95vh; display: flex; flex-direction: column; }
-        .api-panel { background: #fff; padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .api-panel input { width: 70%; padding: 8px; border: 1px solid #ccc; border-radius: 6px; margin-right: 10px; }
-        .chat-box { flex: 1; background: #fff; border-radius: 15px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        #messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
-        .msg { padding: 12px 18px; border-radius: 18px; max-width: 80%; word-wrap: break-word; line-height: 1.6; }
-        .user { align-self: flex-start; background: var(--primary); color: white; border-bottom-right-radius: 2px; }
-        .ai { align-self: flex-end; background: #f0f0f0; color: #1f2937; border-bottom-left-radius: 2px; }
-        .input-area { padding: 20px; border-top: 1px solid #eee; display: flex; gap: 10px; }
-        input#user-in { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 10px; outline: none; }
-        button { background: var(--primary); color: white; border: none; padding: 10px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; }
-        button:disabled { background: #9ca3af; }
-        .loading { font-size: 0.8rem; color: #6b7280; text-align: center; margin-bottom: 5px; }
+        :root {
+            --brand-color: #6366f1;
+            --brand-dark: #4338ca;
+            --bg-light: #f8fafc;
+            --text-main: #1e293b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-light);
+            margin: 0;
+            color: var(--text-main);
+        }
+
+        /* الهيدر واللوجو */
+        header {
+            background: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--brand-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i { font-size: 1.8rem; }
+
+        /* منطقة الإعدادات */
+        .api-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .api-card {
+            background: #EEF2FF;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px dashed var(--brand-color);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .api-card input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #c7d2fe;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        /* صندوق المحادثة */
+        .chat-wrapper {
+            max-width: 800px;
+            margin: 0 auto 100px;
+            padding: 0 15px;
+        }
+
+        #chat-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .bubble {
+            max-width: 85%;
+            padding: 15px 20px;
+            border-radius: 20px;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            line-height: 1.7;
+        }
+
+        .user-bubble {
+            background: var(--brand-color);
+            color: white;
+            align-self: flex-start;
+            border-bottom-right-radius: 4px;
+        }
+
+        .ai-bubble {
+            background: white;
+            color: var(--text-main);
+            align-self: flex-end;
+            border: 1px solid #e2e8f0;
+            border-bottom-left-radius: 4px;
+        }
+
+        .icon-label {
+            font-size: 0.75rem;
+            margin-bottom: 5px;
+            display: block;
+            font-weight: bold;
+            opacity: 0.8;
+        }
+
+        /* شريط الإدخال السفلي */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+        }
+
+        .input-group {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            gap: 12px;
+        }
+
+        #user-msg {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid #f1f5f9;
+            border-radius: 12px;
+            background: #f8fafc;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        #user-msg:focus { border-color: var(--brand-color); background: white; }
+
+        .send-btn {
+            background: var(--brand-color);
+            color: white;
+            border: none;
+            width: 50px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+
+        .send-btn:hover { background: var(--brand-dark); transform: scale(1.05); }
+
+        /* حالة التحميل */
+        .typing { font-style: italic; color: #94a3b8; font-size: 0.9rem; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="api-panel">
-        <strong>🔑 مفتاح OpenRouter:</strong>
-        <input type="password" id="api-key" placeholder="الصق المفتاح هنا (sk-or-v1-...)">
+<header>
+    <div class="logo">
+        <i class="fas fa-graduation-cap"></i>
+        <span>AMMAR-Ai-Academy</span>
     </div>
+    <div style="font-size: 0.8rem; color: #64748b;">الإصدار 2.0 ⚡</div>
+</header>
 
-    <div class="chat-box">
-        <div id="messages">
-            <div class="msg ai">تم تحديث النظام. يرجى إدخال المفتاح بالأعلى وسأجيبك باستخدام Gemini 2.0 أو Llama 3.</div>
+<div class="api-container">
+    <div class="api-card">
+        <i class="fas fa-key" style="color: var(--brand-color);"></i>
+        <input type="password" id="api-key" placeholder="أدخل مفتاح OpenRouter لتفعيل الذكاء...">
+    </div>
+</div>
+
+<div class="chat-wrapper">
+    <div id="chat-flow">
+        <div class="bubble ai">
+            <span class="icon-label"><i class="fas fa-robot"></i> نظام الأكاديمية</span>
+            أهلاً بك في أكاديمية عمار للذكاء الاصطناعي. كيف يمكنني مساعدتك في دروسك اليوم؟
         </div>
-        <div id="loading-status" class="loading" style="display:none;">جاري الاتصال بالعقل الاصطناعي...</div>
-        <div class="input-area">
-            <input type="text" id="user-in" placeholder="اسألني عن أي مادة دراسية...">
-            <button id="send-btn">إرسال</button>
-        </div>
+    </div>
+    <div id="status" class="typing"><i class="fas fa-spinner fa-spin"></i> جاري استشارة المعلم الذكي...</div>
+</div>
+
+<div class="bottom-bar">
+    <div class="input-group">
+        <input type="text" id="user-msg" placeholder="اسأل عن الفيزياء، الكيمياء، أو البرمجة...">
+        <button class="send-btn" id="send-btn"><i class="fas fa-paper-plane"></i></button>
     </div>
 </div>
 
 <script>
-    const messagesDiv = document.getElementById('messages');
-    const userIn = document.getElementById('user-in');
+    const chatFlow = document.getElementById('chat-flow');
+    const userIn = document.getElementById('user-msg');
     const keyIn = document.getElementById('api-key');
     const sendBtn = document.getElementById('send-btn');
-    const loader = document.getElementById('loading-status');
+    const status = document.getElementById('status');
 
-    function addMessage(role, text) {
+    function createBubble(role, text) {
         const div = document.createElement('div');
-        div.className = `msg ${role}`;
-        div.innerText = text;
-        messagesDiv.appendChild(div);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        div.className = `bubble ${role === 'user' ? 'user-bubble' : 'ai-bubble'}`;
+        
+        const icon = role === 'user' ? 'fa-user' : 'fa-robot';
+        const label = role === 'user' ? 'أنت' : 'AMMAR-Ai';
+
+        div.innerHTML = `<span class="icon-label"><i class="fas ${icon}"></i> ${label}</span>${text}`;
+        chatFlow.appendChild(div);
+        window.scrollTo(0, document.body.scrollHeight);
     }
 
-    async function fetchAI(question, key) {
-        // قائمة الموديلات التي سنحاول استخدامها بالترتيب
-        const models = [
-            "google/gemini-2.0-flash-001",
-            "google/gemini-pro-1.5",
-            "meta-llama/llama-3.1-8b-instruct:free"
-        ];
-
-        for (let model of models) {
-            try {
-                const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${key}`,
-                        "Content-Type": "application/json",
-                        "HTTP-Referer": window.location.origin
-                    },
-                    body: JSON.stringify({
-                        "model": model,
-                        "messages": [{ "role": "user", "content": question }]
-                    })
-                });
-
-                const data = await response.json();
-                
-                if (response.ok && data.choices) {
-                    return data.choices[0].message.content;
-                }
-                console.warn(`الموديل ${model} لم يستجب، ننتقل للتالي...`);
-            } catch (e) {
-                console.error(`خطأ في ${model}:`, e);
-            }
-        }
-        throw new Error("جميع الموديلات فشلت. تأكد من صحة المفتاح أو رصيدك في OpenRouter.");
+    async function askAI(question, key) {
+        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${key}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "model": "google/gemini-2.0-flash-001",
+                "messages": [{ "role": "user", "content": question }]
+            })
+        });
+        const data = await response.json();
+        return data.choices[0].message.content;
     }
 
     sendBtn.addEventListener('click', async () => {
         const q = userIn.value.trim();
         const k = keyIn.value.trim();
-        if (!q || !k) return alert("من فضلك ضع المفتاح واكتب سؤالك!");
+        if (!q || !k) return alert("يرجى التأكد من وضع المفتاح وكتابة السؤال!");
 
-        addMessage('user', q);
+        createBubble('user', q);
         userIn.value = '';
+        status.style.display = 'block';
         sendBtn.disabled = true;
-        loader.style.display = 'block';
 
         try {
-            const reply = await fetchAI(q, k);
-            addMessage('ai', reply);
+            const reply = await askAI(q, k);
+            createBubble('ai', reply);
         } catch (err) {
-            addMessage('ai', "❌ " + err.message);
+            createBubble('ai', "عذراً، حدث خطأ في الاتصال. تأكد من المفتاح.");
         } finally {
+            status.style.display = 'none';
             sendBtn.disabled = false;
-            loader.style.display = 'none';
         }
     });
 
